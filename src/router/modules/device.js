@@ -33,7 +33,7 @@ const deviceRoute = {
     },
     {
       path: '/maintainDevice',
-      component: () => import('@/views/module-manage/index'),
+      component: () => import('@/views/device/maintainDevice'),
       name: 'MaintainDevice',
       meta: {
         title: '维护设备',
