@@ -1,5 +1,5 @@
 <template>
-  <div class="maintain-device">
+  <div class="scrap-device">
     <span>请选择设备状态：</span>
     <el-select
       v-model="query.querySelect"
@@ -27,28 +27,27 @@
       <el-table-column prop="device_id" label="设备ID" width="80" />
       <el-table-column prop="device_name" label="设备名称" />
       <el-table-column prop="principal" label="负责人" />
-      <el-table-column prop="is_maintain" label="是否维护" />
-      <el-table-column prop="maintain_owner" label="维护人" />
-      <el-table-column prop="start_time" label="开始时间" />
-      <el-table-column prop="finished_time" label="预计结束时间" />
-      <el-table-column prop="status" label="维护状态" />
+      <el-table-column prop="is_scraped" label="是否废弃" />
+      <el-table-column prop="scrap_user" label="废弃执行人" />
+      <el-table-column prop="scrap_time" label="废弃时间" />
+      <el-table-column prop="detail" label="废弃原因" />
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
           <el-button
-            v-if="scope.row.is_maintain == '否'"
+            v-if="scope.row.is_scraped == '否'"
             type="success"
-            style="font-size: 2px;margin-right:5px"
-            @click="startMaintain(scope.row.device_id)"
+            style="font-size: 2px"
+            @click="startScrap(scope.row.device_id)"
           >
-            发起维护
+            报废设备
           </el-button>
           <el-button
-            v-if="scope.row.is_maintain == '是'"
+            v-if="scope.row.is_scraped == '是'"
             type="primary"
-            style="font-size: 2px;margin-right:5px"
-            @click="stopMaintain(scope.row.device_id)"
+            style="font-size: 2px"
+            @click="stopScrap(scope.row.device_id)"
           >
-            取消维护
+            取消报废
           </el-button>
         </template>
       </el-table-column>
@@ -66,9 +65,9 @@
 </template>
 
 <script>
-import { getDeviceMaintainList } from '@/api/device'
+import { getDeviceScrapList } from '@/api/device'
 export default {
-  name: 'MaintainListDevice',
+  name: 'ScrapListDevice',
   data() {
     return {
       deviceList: [],
@@ -83,11 +82,11 @@ export default {
         },
         {
           value: 1,
-          label: '维护中'
+          label: '已报废'
         },
         {
           value: 2,
-          label: '未维护'
+          label: '未报废'
         }
       ],
       page: {
@@ -104,18 +103,18 @@ export default {
     getList() {
       // 获取设备维护信息
       this.listLoading = true
-      getDeviceMaintainList(this.query).then((response) => {
+      getDeviceScrapList(this.query).then((response) => {
         this.deviceList = response.data.list
         this.page.total = response.data.total
         this.listLoading = false
       })
     },
-    startMaintain(device_id) {
-      // 发起维护设备
+    startScrap(device_id) {
+      // 发起报废设备
       console.log('startMaintain:' + device_id)
     },
-    stopMaintain(device_id) {
-      // 结束设备维护
+    stopScrap(device_id) {
+      // 取消设备报废
       console.log('stopMaintain:' + device_id)
     },
     handleCurrentChange(new_page) {
@@ -127,7 +126,7 @@ export default {
 </script>
 
 <style scoped>
-.maintain-device {
+.scrap-device {
   margin-left: 5px;
   margin-top: 5px;
 }

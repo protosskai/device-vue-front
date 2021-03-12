@@ -12,6 +12,7 @@ import deviceRoute from './modules/device'
 import userRoute from './modules/user'
 import permissionRoute from './modules/permission'
 import roleRoute from './modules/role'
+import labRoute from './modules/lab'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -382,10 +383,12 @@ export const asyncRoutes = [
     ]
   },
   deviceRoute,
+  labRoute,
   userRoute,
   roleRoute,
   permissionRoute,
-  modulesRoute
+  modulesRoute,
+  
 ]
 const createRouter = () => new Router({
   // mode: 'history', // require service support

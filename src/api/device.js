@@ -14,3 +14,11 @@ export function getDeviceMaintainList(query) {
     params: query
   })
 }
+
+export function getDeviceScrapList(query) {
+  return request({
+    url: '/vue-element-admin/device/scrapList',
+    method: 'get',
+    params: query
+  })
+}

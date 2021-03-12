@@ -43,7 +43,7 @@ const deviceRoute = {
     },
     {
       path: '/scrapDevice',
-      component: () => import('@/views/module-manage/index'),
+      component: () => import('@/views/device/scrapDevice'),
       name: 'ScrapDevice',
       meta: {
         title: '报废管理',

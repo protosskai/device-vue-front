@@ -31,6 +31,7 @@ module.exports = [
             }
         }
     },
+    // Get Device Maintain List
     {
         url: '/vue-element-admin/device/maintainList',
         type: 'get',
@@ -99,6 +100,77 @@ module.exports = [
                 data = data1
             } else {
                 data = data2
+            }
+            return {
+                code: 20000,
+                data: data
+            }
+        }
+    },
+    // Get Device Scrap List
+    {
+        url: '/vue-element-admin/device/scrapList',
+        type: 'get',
+        response: config => {
+            const data0 = {
+                list: [
+                    Mock.mock({
+                        device_id: 1,
+                        device_name: "第一个",
+                        principal: "Mike",
+                        is_scraped: "否",
+                        scrap_user: "Tom",
+                        scrap_time: "",
+                        detail: "",
+                    }),
+                    Mock.mock({
+                        device_id: 1,
+                        device_name: "第二个",
+                        principal: "Mike",
+                        is_scraped: "是",
+                        scrap_user: "Tim",
+                        scrap_time: "2020-01-01",
+                        detail: "设备损坏",
+                    })
+                ],
+                total: 2
+            };
+            const data1 = {
+                list: [
+                    Mock.mock({
+                        device_id: 1,
+                        device_name: "第一个",
+                        principal: "Mike",
+                        is_scraped: "否",
+                        scrap_user: "Tom",
+                        scrap_time: "",
+                        detail: "",
+                    }),
+                ],
+                total: 1
+            };
+            const data2 = {
+                list: [
+                    Mock.mock({
+                        device_id: 1,
+                        device_name: "第二个",
+                        principal: "Mike",
+                        is_scraped: "是",
+                        scrap_user: "Tim",
+                        scrap_time: "",
+                        detail: "设备损坏",
+                    })
+                ],
+                total: 1
+            };
+            var data = 0
+            const { querySelect } = config.query
+            if (querySelect == 0) {
+                data = data0
+            } else if (querySelect == 1) {
+                data = data2
+            } else {
+                data = data1
             }
             return {
                 code: 20000,
