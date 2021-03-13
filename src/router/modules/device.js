@@ -53,7 +53,7 @@ const deviceRoute = {
     },
     {
       path: '/lendDevice',
-      component: () => import('@/views/module-manage/index'),
+      component: () => import('@/views/device/lendDevice'),
       name: 'LendDevice',
       meta: {
         title: '借出管理',
@@ -63,7 +63,7 @@ const deviceRoute = {
     },
     {
       path: '/reserveDevice',
-      component: () => import('@/views/module-manage/index'),
+      component: () => import('@/views/device/reverseDevice'),
       name: 'ReserveDevice',
       meta: {
         title: '预约管理',

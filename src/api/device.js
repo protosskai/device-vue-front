@@ -22,3 +22,19 @@ export function getDeviceScrapList(query) {
     params: query
   })
 }
+
+export function getDeviceLendList(query) {
+  return request({
+    url: '/vue-element-admin/device/lendList',
+    method: 'get',
+    params: query
+  })
+}
+
+export function getDeviceReverseList(query) {
+  return request({
+    url: '/vue-element-admin/device/reverseList',
+    method: 'get',
+    params: query
+  })
+}

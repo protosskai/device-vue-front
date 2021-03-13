@@ -1,3 +1,4 @@
+const Mock = require('mockjs')
 
 const tokens = {
   admin: {
@@ -78,6 +79,42 @@ module.exports = [
       return {
         code: 20000,
         data: 'success'
+      }
+    }
+  },
+  // user list
+  {
+    url: '/vue-element-admin/user/userList',
+    type: 'get',
+    response: config => {
+      const data = {
+        list: [
+          Mock.mock({
+            id: "1",
+            user_alias: "第一个",
+            role: "admin",
+            sex: "男",
+            phone: "15145455555",
+            wechat: "",
+            qq: "",
+            create_time: "2020-01-01"
+          }),
+          Mock.mock({
+            id: "1",
+            user_alias: "第二个",
+            role: "editor",
+            sex: "女 ",
+            phone: "15145466666",
+            wechat: "",
+            qq: "",
+            create_time: "2020-01-01"
+          }),
+        ],
+        total: 2
+      }
+      return {
+        code: 20000,
+        data: data
       }
     }
   }

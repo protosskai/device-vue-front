@@ -34,7 +34,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import ErrorLog from '@/components/ErrorLog'
 import Screenfull from '@/components/Screenfull'
@@ -43,7 +42,6 @@ import Search from '@/components/HeaderSearch'
 
 export default {
   components: {
-    Breadcrumb,
     Hamburger,
     ErrorLog,
     Screenfull,
@@ -85,11 +83,6 @@ export default {
       background: rgba(0, 0, 0, 0.025);
     }
   }
-
-  .breadcrumb-container {
-    float: left;
-  }
-
   .errLog-container {
     display: inline-block;
     vertical-align: top;

@@ -13,7 +13,7 @@ const roleRoute = {
   children: [
     {
       path: '/listRole',
-      component: () => import('@/views/module-manage/index'),
+      component: () => import('@/views/role/roleList'),
       name: 'ListRole',
       meta: {
         title: '角色列表',
@@ -23,7 +23,7 @@ const roleRoute = {
     },
     {
       path: '/addRole',
-      component: () => import('@/views/module-manage/index'),
+      component: () => import('@/views/role/addRole'),
       name: 'AddRole',
       meta: {
         title: '新增角色',

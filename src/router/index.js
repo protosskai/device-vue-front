@@ -7,7 +7,6 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-import modulesRoute from './modules/modules'
 import deviceRoute from './modules/device'
 import userRoute from './modules/user'
 import permissionRoute from './modules/permission'
@@ -387,7 +386,6 @@ export const asyncRoutes = [
   userRoute,
   roleRoute,
   permissionRoute,
-  modulesRoute,
   
 ]
 const createRouter = () => new Router({

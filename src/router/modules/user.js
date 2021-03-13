@@ -13,7 +13,7 @@ const userRoute = {
   children: [
     {
       path: '/listUser',
-      component: () => import('@/views/module-manage/index'),
+      component: () => import('@/views/user/userList'),
       name: 'ListUser',
       meta: {
         title: '用户列表',
@@ -23,7 +23,7 @@ const userRoute = {
     },
     {
       path: '/addUser',
-      component: () => import('@/views/module-manage/index'),
+      component: () => import('@/views/user/addUser'),
       name: 'AddUser',
       meta: {
         title: '新增用户',
@@ -31,16 +31,6 @@ const userRoute = {
         roles: ['admin', 'editor'] // you can set roles in root nav
       }
     },
-    {
-      path: '/banUser',
-      component: () => import('@/views/module-manage/index'),
-      name: 'BanUser',
-      meta: {
-        title: '封禁列表',
-        icon: 'el-icon-remove',
-        roles: ['admin', 'editor'] // you can set roles in root nav
-      }
-    }
   ]
 }
 

@@ -13,7 +13,7 @@ const permissionRoute = {
   children: [
     {
       path: '/listPermission',
-      component: () => import('@/views/module-manage/index'),
+      component: () => import('@/views/permission/permissionList'),
       name: 'ListPermission',
       meta: {
         title: '权限列表',
@@ -23,7 +23,7 @@ const permissionRoute = {
     },
     {
       path: '/addPermission',
-      component: () => import('@/views/module-manage/index'),
+      component: () => import('@/views/permission/addPermission'),
       name: 'AddPermission',
       meta: {
         title: '新增权限',
