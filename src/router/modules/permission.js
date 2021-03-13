@@ -20,16 +20,6 @@ const permissionRoute = {
         icon: 'list',
         roles: ['admin', 'editor'] // you can set roles in root nav
       }
-    },
-    {
-      path: '/addPermission',
-      component: () => import('@/views/permission/addPermission'),
-      name: 'AddPermission',
-      meta: {
-        title: '新增权限',
-        icon: 'el-icon-plus',
-        roles: ['admin', 'editor'] // you can set roles in root nav
-      }
     }
   ]
 }

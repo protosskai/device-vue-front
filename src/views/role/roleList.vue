@@ -11,12 +11,7 @@
       style="width: 100%"
     >
       <el-table-column prop="id" label="编号" width="80" />
-      <el-table-column prop="user_alias" label="昵称" />
-      <el-table-column prop="role" label="用户身份" />
-      <el-table-column prop="sex" label="性别" />
-      <el-table-column prop="phone" label="手机号" />
-      <el-table-column prop="wechat" label="微信" />
-      <el-table-column prop="qq" label="QQ" />
+      <el-table-column prop="role_name" label="角色名称" />
       <el-table-column prop="create_time" label="创建时间" />
     </el-table>
     <el-pagination
@@ -32,7 +27,7 @@
 </template>
 
 <script>
-import { getUserList } from "@/api/user";
+import { getRoleList } from "@/api/role";
 export default {
   name: "ListUser",
   data() {
@@ -52,8 +47,8 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
-      getUserList().then((response) => {
-        this.userList = response.data.list;
+      getRoleList().then((response) => {
+        this.roleList = response.data.list;
         this.page.total = response.data.total;
         this.listLoading = false;
       });

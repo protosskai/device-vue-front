@@ -94,5 +94,31 @@ module.exports = [
         status: 'success'
       }
     }
+  },
+  {
+    url: '/vue-element-admin/role/roleList',
+    type: 'get',
+    response: config => {
+      const data = {
+        list: [
+          {
+            id: "1",
+            role_name: "admin",
+            create_time: "2020-01-01"
+          },
+          {
+            id: "2",
+            role_name: "editor",
+            create_time: "2020-01-01"
+          }
+        ],
+        total: 2
+      }
+      return {
+        code: 20000,
+        data: data
+      }
+
+    }
   }
 ]
