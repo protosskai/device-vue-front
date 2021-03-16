@@ -24,18 +24,17 @@
       "
       style="width: 100%"
     >
-      <el-table-column prop="device_id" label="设备ID" width="80" />
-      <el-table-column prop="device_name" label="设备名称" />
-      <el-table-column prop="principal" label="负责人" />
-      <el-table-column prop="is_maintain" label="是否维护" />
-      <el-table-column prop="maintain_owner" label="维护人" />
-      <el-table-column prop="start_time" label="开始时间" />
-      <el-table-column prop="finished_time" label="预计结束时间" />
+      <el-table-column prop="deviceId" label="设备ID" width="80" />
+      <el-table-column prop="deviceName" label="设备名称" />
+      <!-- <el-table-column prop="isMaintain" label="是否维护" /> -->
+      <el-table-column prop="maintainOwner" label="维护人" />
+      <el-table-column prop="startTime" label="开始时间" />
+      <el-table-column prop="finishedTime" label="预计结束时间" />
       <el-table-column prop="status" label="维护状态" />
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
           <el-button
-            v-if="scope.row.is_maintain == '否'"
+            v-if="scope.row.is_maintain == 0"
             type="success"
             style="font-size: 2px;margin-right:5px"
             @click="startMaintain(scope.row.device_id)"
@@ -43,7 +42,7 @@
             发起维护
           </el-button>
           <el-button
-            v-if="scope.row.is_maintain == '是'"
+            v-if="scope.row.is_maintain == 1"
             type="primary"
             style="font-size: 2px;margin-right:5px"
             @click="stopMaintain(scope.row.device_id)"
@@ -74,7 +73,9 @@ export default {
       deviceList: [],
       listLoading: true,
       query: {
-        querySelect: 0
+        querySelect: 0,
+        page: 1,
+        size: 10
       },
       queryOptions: [
         {
@@ -104,6 +105,8 @@ export default {
     getList() {
       // 获取设备维护信息
       this.listLoading = true
+      this.query.page = this.page.currentPage
+      this.query.size = this.page.pageSize
       getDeviceMaintainList(this.query).then((response) => {
         this.deviceList = response.data.list
         this.page.total = response.data.total

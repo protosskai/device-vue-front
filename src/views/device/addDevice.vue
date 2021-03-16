@@ -2,10 +2,7 @@
   <div class="addDevice">
     <el-form ref="form" :model="form" label-width="100px">
       <el-form-item label="设备名称">
-        <el-input
-          v-model="form.device_name"
-          placeholder="请输入设备名称"
-        />
+        <el-input v-model="form.device_name" placeholder="请输入设备名称" />
       </el-form-item>
       <el-form-item label="负责人">
         <el-autocomplete
@@ -43,45 +40,57 @@
 </template>
 
 <script>
+import { addDevice } from "@/api/device";
 export default {
   data() {
     return {
       form: {
-        device_name: '',
-        principal: '',
-        is_maintain: '否',
-        is_abandoned: '否',
-        detail: ''
+        device_name: "",
+        principal: "",
+        is_maintain: "否",
+        is_abandoned: "否",
+        detail: "",
       },
-      principals: []
-    }
+      principals: [],
+    };
   },
   mounted() {
-    this.principals = [{ value: 'Tom' }, { value: 'Mike' }, { value: 'Tim' }]
+    this.principals = [{ value: "Tom" }, { value: "Mike" }, { value: "Tim" }];
   },
   methods: {
     onSubmit() {
-      console.log('submit!')
+      var data = {
+        deviceName: this.form.device_name,
+        principalUser: this.form.principal,
+        isMaintain: this.form.is_maintain == "否" ? 0 : 1,
+        isScraped: this.form.is_abandoned == "否" ? 0 : 1,
+        detail: this.form.detail,
+      };
+      addDevice(data).then((response) => {
+        if (response.code == 20000) {
+          console.log("添加成功");
+        }
+      });
     },
     querySearchAsync(queryString, cb) {
-      var principals = this.principals
+      var principals = this.principals;
       var results = queryString
         ? principals.filter(this.createStateFilter(queryString))
-        : principals
-      cb(results)
+        : principals;
+      cb(results);
     },
     createStateFilter(queryString) {
       return (state) => {
         return (
           state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
-        )
-      }
+        );
+      };
     },
     handleSelect(item) {
-      console.log(item)
-    }
-  }
-}
+      console.log(item);
+    },
+  },
+};
 </script>
 
 <style scoped>

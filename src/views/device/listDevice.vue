@@ -11,10 +11,22 @@
       style="width: 100%"
     >
       <el-table-column prop="id" label="编号" width="80" />
-      <el-table-column prop="device_name" label="设备名称" />
-      <el-table-column prop="principal" label="负责人" />
-      <el-table-column prop="is_maintain" label="是否维护" />
-      <el-table-column prop="is_abandoned" label="是否废弃" />
+      <el-table-column prop="deviceName" label="设备名称" />
+      <el-table-column prop="principalUser" label="负责人" />
+      <el-table-column prop="isMaintain" label="是否维护">
+         <template slot-scope="scope">
+          <div >
+            {{convertBool(scope.row.isMaintain)}}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="isScraped" label="是否废弃">
+        <template slot-scope="scope">
+          <div >
+            {{convertBool(scope.row.isScraped)}}
+          </div>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
       class="pagination"
@@ -29,9 +41,9 @@
 </template>
 
 <script>
-import { getDeviceList } from '@/api/device'
+import { getDeviceList } from "@/api/device";
 export default {
-  name: 'ListDevice',
+  name: "ListDevice",
   data() {
     return {
       deviceList: [],
@@ -39,28 +51,31 @@ export default {
       page: {
         pageSize: 10,
         total: 50,
-        currentPage: 1
-      }
-    }
+        currentPage: 1,
+      },
+    };
   },
   created() {
-    this.getList()
+    this.getList();
   },
   methods: {
     getList() {
-      this.listLoading = true
+      this.listLoading = true;
       getDeviceList().then((response) => {
-        this.deviceList = response.data.list
-        this.page.total = response.data.total
-        this.listLoading = false
-      })
+        this.deviceList = response.data.list;
+        this.page.total = response.data.total;
+        this.listLoading = false;
+      });
     },
     handleCurrentChange(new_page) {
-      this.page.currentPage = new_page
-      console.log('New Page: ' + this.page.currentPage)
-    }
-  }
-}
+      this.page.currentPage = new_page;
+      console.log("New Page: " + this.page.currentPage);
+    },
+    convertBool(bool_val) {
+      return bool_val ? "是" : "否";
+    },
+  },
+};
 </script>
 
 <style scoped>

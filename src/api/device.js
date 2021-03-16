@@ -2,14 +2,22 @@ import request from '@/utils/request'
 
 export function getDeviceList() {
   return request({
-    url: '/vue-element-admin/device/list',
+    url: '/device/list',
     method: 'get'
+  })
+}
+
+export function addDevice(data) {
+  return request({
+    url: '/device/add',
+    method: 'post',
+    data
   })
 }
 
 export function getDeviceMaintainList(query) {
   return request({
-    url: '/vue-element-admin/device/maintainList',
+    url: '/device/maintainList',
     method: 'get',
     params: query
   })
