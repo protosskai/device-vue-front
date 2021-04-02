@@ -14,17 +14,31 @@
       <el-table-column prop="deviceName" label="设备名称" />
       <el-table-column prop="principalUser" label="负责人" />
       <el-table-column prop="isMaintain" label="是否维护">
-         <template slot-scope="scope">
-          <div >
-            {{convertBool(scope.row.isMaintain)}}
+        <template slot-scope="scope">
+          <div>
+            {{ convertBool(scope.row.isMaintain) }}
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="isScraped" label="是否废弃">
         <template slot-scope="scope">
-          <div >
-            {{convertBool(scope.row.isScraped)}}
+          <div>
+            {{ convertBool(scope.row.isScraped) }}
           </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="二维码">
+        <template slot-scope="scope">
+          <!-- <el-button
+            type="success"
+            style="font-size: 2px; margin-right: 5px"
+            @click="showQRCode(scope.row.uuid)"
+            >查看二维码</el-button
+          > -->
+          <el-popover placement="right" width="300" trigger="click">
+            <vue-qr ref="Qrcode" :text="generate_text(scope.row.uuid)" :size="300"></vue-qr>
+            <el-button slot="reference">查看二维码</el-button>
+          </el-popover>
         </template>
       </el-table-column>
     </el-table>
@@ -42,8 +56,12 @@
 
 <script>
 import { getDeviceList } from "@/api/device";
+// 二维码组件
+import VueQr from "vue-qr";
+
 export default {
   name: "ListDevice",
+  components: { VueQr },
   data() {
     return {
       deviceList: [],
@@ -74,6 +92,13 @@ export default {
     convertBool(bool_val) {
       return bool_val ? "是" : "否";
     },
+    generate_text(uuid){
+      let o = {
+        type: "info",
+        uuid: uuid
+      }
+      return JSON.stringify(o)
+    }
   },
 };
 </script>

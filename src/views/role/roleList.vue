@@ -11,8 +11,8 @@
       style="width: 100%"
     >
       <el-table-column prop="id" label="编号" width="80" />
-      <el-table-column prop="role_name" label="角色名称" />
-      <el-table-column prop="create_time" label="创建时间" />
+      <el-table-column prop="roleName" label="角色名称" />
+      <el-table-column prop="createTime" label="创建时间" />
     </el-table>
     <el-pagination
       class="pagination"
@@ -34,6 +34,10 @@ export default {
     return {
       roleList: [],
       listLoading: true,
+      query: {
+        page: 1,
+        size: 10,
+      },
       page: {
         pageSize: 10,
         total: 50,
@@ -47,7 +51,9 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
-      getRoleList().then((response) => {
+      this.query.page = this.page.currentPage;
+      this.query.size = this.page.pageSize;
+      getRoleList(this.query).then((response) => {
         this.roleList = response.data.list;
         this.page.total = response.data.total;
         this.listLoading = false;

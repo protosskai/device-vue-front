@@ -14,13 +14,7 @@ export function getRoles() {
   })
 }
 
-export function addRole(data) {
-  return request({
-    url: '/vue-element-admin/role',
-    method: 'post',
-    data
-  })
-}
+
 
 export function updateRole(id, data) {
   return request({
@@ -38,9 +32,18 @@ export function deleteRole(id) {
 }
 
 
-export function getRoleList() {
+export function getRoleList(query) {
   return request({
-    url: `/vue-element-admin/role/roleList`,
-    method: 'get'
+    url: `/role/list`,
+    method: 'get',
+    params: query
+  })
+}
+
+export function addRole(data) {
+  return request({
+    url: '/role/add',
+    method: 'post',
+    data
   })
 }

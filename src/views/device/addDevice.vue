@@ -58,6 +58,24 @@ export default {
     this.principals = [{ value: "Tom" }, { value: "Mike" }, { value: "Tim" }];
   },
   methods: {
+    success() {
+      this.$alert("添加成功！", "提示", {
+        confirmButtonText: "确定",
+        callback: (action) => {
+          // this.$message({
+          //   type: "info",
+          //   message: `添加成功`,
+          // });
+          this.form = {
+            device_name: "",
+            principal: "",
+            is_maintain: "否",
+            is_abandoned: "否",
+            detail: "",
+          };
+        },
+      });
+    },
     onSubmit() {
       var data = {
         deviceName: this.form.device_name,
@@ -68,6 +86,7 @@ export default {
       };
       addDevice(data).then((response) => {
         if (response.code == 20000) {
+          this.success();
           console.log("添加成功");
         }
       });

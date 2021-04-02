@@ -11,8 +11,8 @@
       style="width: 100%"
     >
       <el-table-column prop="id" label="编号" width="80" />
-      <el-table-column prop="lab_name" label="实验室" />
-      <el-table-column prop="principal_user" label="负责人" />
+      <el-table-column prop="labName" label="实验室" />
+      <el-table-column prop="principalUser" label="负责人" />
       <el-table-column prop="region" label="所属区域" />
       <el-table-column prop="detail" label="详情" />
       <el-table-column label="操作" width="100">
@@ -40,41 +40,47 @@
 </template>
 
 <script>
-import { getLabList } from '@/api/lab'
+import { getLabList } from "@/api/lab";
 export default {
-  name: 'ListLab',
+  name: "ListLab",
   data() {
     return {
       labList: [],
       listLoading: true,
+      query: {
+        page: 1,
+        size: 10,
+      },
       page: {
         pageSize: 10,
         total: 50,
-        currentPage: 1
-      }
-    }
+        currentPage: 1,
+      },
+    };
   },
   created() {
-    this.getList()
+    this.getList();
   },
   methods: {
     getList() {
-      this.listLoading = true
-      getLabList().then((response) => {
-        this.labList = response.data.list
-        this.page.total = response.data.total
-        this.listLoading = false
-      })
+      this.listLoading = true;
+      this.query.page = this.page.currentPage;
+      this.query.size = this.page.pageSize;
+      getLabList(this.query).then((response) => {
+        this.labList = response.data.list;
+        this.page.total = response.data.total;
+        this.listLoading = false;
+      });
     },
     handleCurrentChange(new_page) {
-      this.page.currentPage = new_page
-      console.log('New Page: ' + this.page.currentPage)
+      this.page.currentPage = new_page;
+      console.log("New Page: " + this.page.currentPage);
     },
-    startReverse(lab_id){
-        console.log(lab_id)
-    }
-  }
-}
+    startReverse(lab_id) {
+      console.log(lab_id);
+    },
+  },
+};
 </script>
 
 <style scoped>

@@ -95,7 +95,7 @@ export default {
         sex: "",
         phone: "",
         wechat: "",
-        qq: ""
+        qq: "",
       },
       roleOptions: [
         {
@@ -118,7 +118,30 @@ export default {
   },
   mounted() {},
   methods: {
+    success() {
+      this.$alert("添加成功！", "提示", {
+        confirmButtonText: "确定",
+        callback: (action) => {
+          // this.$message({
+          //   type: "info",
+          //   message: `添加成功`,
+          // });
+          this.form = {
+            user_name: "",
+            user_alias: "",
+            password: "",
+            password1: "",
+            role: "",
+            sex: "",
+            phone: "",
+            wechat: "",
+            qq: "",
+          };
+        },
+      });
+    },
     onSubmit() {
+      this.success();
       console.log("submit!");
     },
   },

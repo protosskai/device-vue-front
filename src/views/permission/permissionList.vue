@@ -11,10 +11,10 @@
       style="width: 100%"
     >
       <el-table-column prop="id" label="编号" width="80" />
-      <el-table-column prop="permission_name" label="权限名称" />
-      <el-table-column prop="module_name" label="模块名" />
+      <el-table-column prop="permissionName" label="权限名称" />
+      <el-table-column prop="moduleName" label="模块名" />
       <el-table-column prop="path" label="路径" />
-      <el-table-column prop="create_time" label="创建时间" />
+      <el-table-column prop="createTime" label="创建时间" />
     </el-table>
     <el-pagination
       class="pagination"
@@ -36,6 +36,10 @@ export default {
     return {
       permissionList: [],
       listLoading: true,
+      query: {
+        page: 1,
+        size: 10,
+      },
       page: {
         pageSize: 10,
         total: 50,
@@ -49,7 +53,9 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
-      getPermissionList().then((response) => {
+      this.query.page = this.page.currentPage;
+      this.query.size = this.page.pageSize;
+      getPermissionList(this.query).then((response) => {
         this.permissionList = response.data.list;
         this.page.total = response.data.total;
         this.listLoading = false;

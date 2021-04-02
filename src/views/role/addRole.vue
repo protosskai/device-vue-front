@@ -3,7 +3,7 @@
     <el-form ref="form" :model="form" label-width="100px">
       <el-form-item label="角色名称">
         <el-input
-          v-model="form.role_name"
+          v-model="form.roleName"
           placeholder="请输入角色名称"
           style="width: 180px"
         />
@@ -17,18 +17,38 @@
 </template>
 
 <script>
+import { addRole } from "@/api/role";
 export default {
   data() {
     return {
       form: {
-        role_name: "",
+        roleName: "",
       },
     };
   },
   mounted() {},
   methods: {
+    success() {
+      this.$alert("添加成功！", "提示", {
+        confirmButtonText: "确定",
+        callback: (action) => {
+          // this.$message({
+          //   type: "info",
+          //   message: `添加成功`,
+          // });
+          this.form = {
+            roleName: "",
+          };
+        },
+      });
+    },
     onSubmit() {
-      console.log("submit!");
+      addRole(this.form).then((response) => {
+        if (response.code == 20000) {
+          this.success();
+          console.log("添加成功");
+        }
+      });
     },
   },
 };

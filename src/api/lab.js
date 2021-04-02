@@ -1,8 +1,9 @@
 import request from '@/utils/request'
 
-export function getLabList() {
+export function getLabList(query) {
   return request({
-    url: '/vue-element-admin/lab/labList',
-    method: 'get'
+    url: '/lab/info/list',
+    method: 'get',
+    params: query
   })
 }

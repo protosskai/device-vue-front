@@ -24,28 +24,33 @@
       "
       style="width: 100%"
     >
-      <el-table-column prop="device_id" label="设备ID" width="80" />
-      <el-table-column prop="device_name" label="设备名称" />
-      <el-table-column prop="principal" label="负责人" />
-      <el-table-column prop="is_scraped" label="是否废弃" />
-      <el-table-column prop="scrap_user" label="废弃执行人" />
-      <el-table-column prop="scrap_time" label="废弃时间" />
+      <el-table-column prop="deviceId" label="设备ID" width="80" />
+      <el-table-column prop="deviceName" label="设备名称" />
+      <el-table-column prop="isScraped" label="是否废弃">
+        <template slot-scope="scope">
+          <div>
+            {{ convertBool(scope.row.isScraped) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="scrapUser" label="废弃执行人" />
+      <el-table-column prop="scrapTime" label="废弃时间" />
       <el-table-column prop="detail" label="废弃原因" />
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
           <el-button
-            v-if="scope.row.is_scraped == '否'"
+            v-if="scope.row.isScraped == 0"
             type="success"
             style="font-size: 2px"
-            @click="startScrap(scope.row.device_id)"
+            @click="startScrap(scope.row.deviceId)"
           >
             报废设备
           </el-button>
           <el-button
-            v-if="scope.row.is_scraped == '是'"
+            v-if="scope.row.isScraped == 1"
             type="primary"
             style="font-size: 2px"
-            @click="stopScrap(scope.row.device_id)"
+            @click="stopScrap(scope.row.deviceId)"
           >
             取消报废
           </el-button>
@@ -65,64 +70,71 @@
 </template>
 
 <script>
-import { getDeviceScrapList } from '@/api/device'
+import { getDeviceScrapList } from "@/api/device";
 export default {
-  name: 'ScrapListDevice',
+  name: "ScrapListDevice",
   data() {
     return {
       deviceList: [],
       listLoading: true,
       query: {
-        querySelect: 0
+        querySelect: 0,
+        page: 1,
+        size: 10,
       },
       queryOptions: [
         {
           value: 0,
-          label: '全部设备'
+          label: "全部设备",
         },
         {
           value: 1,
-          label: '已报废'
+          label: "已报废",
         },
         {
           value: 2,
-          label: '未报废'
-        }
+          label: "未报废",
+        },
       ],
       page: {
         pageSize: 10,
         total: 50,
-        currentPage: 1
-      }
-    }
+        currentPage: 1,
+      },
+    };
   },
   created() {
-    this.getList()
+    this.getList();
   },
   methods: {
     getList() {
       // 获取设备维护信息
-      this.listLoading = true
+      this.listLoading = true;
+      this.query.page = this.page.currentPage;
+      this.query.size = this.page.pageSize;
       getDeviceScrapList(this.query).then((response) => {
-        this.deviceList = response.data.list
-        this.page.total = response.data.total
-        this.listLoading = false
-      })
+        this.deviceList = response.data.list;
+        this.page.total = response.data.total;
+        this.listLoading = false;
+      });
     },
     startScrap(device_id) {
       // 发起报废设备
-      console.log('startMaintain:' + device_id)
+      console.log("startMaintain:" + device_id);
     },
     stopScrap(device_id) {
       // 取消设备报废
-      console.log('stopMaintain:' + device_id)
+      console.log("stopMaintain:" + device_id);
     },
     handleCurrentChange(new_page) {
-      this.page.currentPage = new_page
-      console.log('New Page: ' + this.page.currentPage)
-    }
-  }
-}
+      this.page.currentPage = new_page;
+      console.log("New Page: " + this.page.currentPage);
+    },
+    convertBool(bool_val) {
+      return bool_val ? "是" : "否";
+    },
+  },
+};
 </script>
 
 <style scoped>

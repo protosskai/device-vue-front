@@ -384,8 +384,8 @@ export const asyncRoutes = [
   deviceRoute,
   labRoute,
   userRoute,
-  roleRoute,
-  permissionRoute,
+  // roleRoute,
+  // permissionRoute,
   
 ]
 const createRouter = () => new Router({

@@ -24,29 +24,34 @@
       "
       style="width: 100%"
     >
-      <el-table-column prop="device_id" label="设备ID" width="80" />
-      <el-table-column prop="device_name" label="设备名称" />
-      <el-table-column prop="principal" label="负责人" />
-      <el-table-column prop="is_reverse" label="是否预约" />
-      <el-table-column prop="reserve_user" label="预约者" />
-      <el-table-column prop="reserve_time" label="预约时间" />
-      <el-table-column prop="expect_return_time" label="预计归还时间" />
+      <el-table-column prop="deviceId" label="设备ID" width="80" />
+      <el-table-column prop="deviceName" label="设备名称" />
+      <el-table-column prop="isReverse" label="是否预约">
+        <template slot-scope="scope">
+          <div>
+            {{ convertBool(scope.row.isReverse) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="reserveUser" label="预约者" />
+      <el-table-column prop="reserveTime" label="预约时间" />
+      <el-table-column prop="expectReturnTime" label="预计归还时间" />
       <el-table-column prop="detail" label="预约原因" />
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
           <el-button
-            v-if="scope.row.is_reverse == '否'"
+            v-if="scope.row.isReverse == 0"
             type="success"
             style="font-size: 2px"
-            @click="startReverse(scope.row.device_id)"
+            @click="startReverse(scope.row.deviceId)"
           >
             预约设备
           </el-button>
           <el-button
-            v-if="scope.row.is_reverse == '是'"
+            v-if="scope.row.isReverse == 1"
             type="primary"
             style="font-size: 2px"
-            @click="stopReverse(scope.row.device_id)"
+            @click="stopReverse(scope.row.deviceId)"
           >
             取消预约
           </el-button>
@@ -66,64 +71,71 @@
 </template>
 
 <script>
-import { getDeviceReverseList } from '@/api/device'
+import { getDeviceReverseList } from "@/api/device";
 export default {
-  name: 'ReverseListDevice',
+  name: "ReverseListDevice",
   data() {
     return {
       deviceList: [],
       listLoading: true,
       query: {
-        querySelect: 0
+        querySelect: 0,
+        page: 1,
+        size: 10,
       },
       queryOptions: [
         {
           value: 0,
-          label: '全部设备'
+          label: "全部设备",
         },
         {
           value: 1,
-          label: '已预约'
+          label: "已预约",
         },
         {
           value: 2,
-          label: '未预约'
-        }
+          label: "未预约",
+        },
       ],
       page: {
         pageSize: 10,
         total: 50,
-        currentPage: 1
-      }
-    }
+        currentPage: 1,
+      },
+    };
   },
   created() {
-    this.getList()
+    this.getList();
   },
   methods: {
     getList() {
       // 获取设备维护信息
-      this.listLoading = true
+      this.listLoading = true;
+      this.query.page = this.page.currentPage;
+      this.query.size = this.page.pageSize;
       getDeviceReverseList(this.query).then((response) => {
-        this.deviceList = response.data.list
-        this.page.total = response.data.total
-        this.listLoading = false
-      })
+        this.deviceList = response.data.list;
+        this.page.total = response.data.total;
+        this.listLoading = false;
+      });
     },
     startReverse(device_id) {
       // 发起借出设备
-      console.log('startMaintain:' + device_id)
+      console.log("startMaintain:" + device_id);
     },
     stopReverse(device_id) {
       // 发起设备归还
-      console.log('stopMaintain:' + device_id)
+      console.log("stopMaintain:" + device_id);
     },
     handleCurrentChange(new_page) {
-      this.page.currentPage = new_page
-      console.log('New Page: ' + this.page.currentPage)
-    }
-  }
-}
+      this.page.currentPage = new_page;
+      console.log("New Page: " + this.page.currentPage);
+    },
+    convertBool(bool_val) {
+      return bool_val ? "是" : "否";
+    },
+  },
+};
 </script>
 
 <style scoped>

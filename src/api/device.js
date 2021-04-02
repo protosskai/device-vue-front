@@ -2,14 +2,14 @@ import request from '@/utils/request'
 
 export function getDeviceList() {
   return request({
-    url: '/device/list',
+    url: '/device/info/list',
     method: 'get'
   })
 }
 
 export function addDevice(data) {
   return request({
-    url: '/device/add',
+    url: '/device/info/add',
     method: 'post',
     data
   })
@@ -17,7 +17,7 @@ export function addDevice(data) {
 
 export function getDeviceMaintainList(query) {
   return request({
-    url: '/device/maintainList',
+    url: '/device/maintain/list',
     method: 'get',
     params: query
   })
@@ -25,7 +25,7 @@ export function getDeviceMaintainList(query) {
 
 export function getDeviceScrapList(query) {
   return request({
-    url: '/vue-element-admin/device/scrapList',
+    url: '/device/scrap/list',
     method: 'get',
     params: query
   })
@@ -33,7 +33,7 @@ export function getDeviceScrapList(query) {
 
 export function getDeviceLendList(query) {
   return request({
-    url: '/vue-element-admin/device/lendList',
+    url: '/device/lend/list',
     method: 'get',
     params: query
   })
@@ -41,7 +41,7 @@ export function getDeviceLendList(query) {
 
 export function getDeviceReverseList(query) {
   return request({
-    url: '/vue-element-admin/device/reverseList',
+    url: '/device/reserve/list',
     method: 'get',
     params: query
   })
