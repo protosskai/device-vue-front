@@ -43,7 +43,7 @@
             v-if="scope.row.isMaintain == 0"
             type="success"
             style="font-size: 2px; margin-right: 5px"
-            @click="startMaintain(scope.row.deviceId)"
+            @click="startMaintain(scope.$index, scope.row.deviceId)"
           >
             发起维护
           </el-button>
@@ -51,7 +51,7 @@
             v-if="scope.row.isMaintain == 1"
             type="primary"
             style="font-size: 2px; margin-right: 5px"
-            @click="stopMaintain(scope.row.deviceId)"
+            @click="stopMaintain(scope.$index, scope.row.deviceId)"
           >
             取消维护
           </el-button>
@@ -72,6 +72,7 @@
 
 <script>
 import { getDeviceMaintainList } from "@/api/device";
+import { startMaintainDevice, stopMaintainDevice } from "@/api/device";
 export default {
   name: "MaintainListDevice",
   data() {
@@ -119,13 +120,27 @@ export default {
         this.listLoading = false;
       });
     },
-    startMaintain(device_id) {
+    startMaintain(index, device_id) {
       // 发起维护设备
-      console.log("startMaintain:" + device_id);
+      let userId = 1; //管理员ID
+      let query = {
+        deviceId: device_id,
+        userId: userId,
+      };
+      startMaintainDevice(query).then((response) => {
+        this.deviceList[index].isMaintain = 1;
+      });
     },
-    stopMaintain(device_id) {
+    stopMaintain(index, device_id) {
       // 结束设备维护
-      console.log("stopMaintain:" + device_id);
+      let userId = 1; //管理员ID
+      let query = {
+        deviceId: device_id,
+        userId: userId
+      };
+      stopMaintainDevice(query).then((response) => {
+        this.deviceList[index].isMaintain = 0;
+      });
     },
     handleCurrentChange(new_page) {
       this.page.currentPage = new_page;

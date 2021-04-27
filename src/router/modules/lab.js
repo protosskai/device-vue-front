@@ -22,15 +22,25 @@ const labRoute = {
       }
     },
     {
-      path: '/realTimeLab',
-      component: () => import('@/views/module-manage/index'),
-      name: 'RealTimeLab',
+      path: '/addLab',
+      component: () => import('@/views/laboratory/addLab'),
+      name: 'AddLab',
       meta: {
-        title: '实时状态',
-        icon: 'el-icon-odometer',
+        title: '新增实验室',
+        icon: 'el-icon-plus',
         roles: ['admin', 'editor'] // you can set roles in root nav
       }
-    }
+    },
+    // {
+    //   path: '/realTimeLab',
+    //   component: () => import('@/views/module-manage/index'),
+    //   name: 'RealTimeLab',
+    //   meta: {
+    //     title: '实时状态',
+    //     icon: 'el-icon-odometer',
+    //     roles: ['admin', 'editor'] // you can set roles in root nav
+    //   }
+    // }
   ]
 }
 

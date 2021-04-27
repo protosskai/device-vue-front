@@ -42,7 +42,7 @@
             v-if="scope.row.isLended == 0"
             type="success"
             style="font-size: 2px"
-            @click="startLend(scope.row.deviceId)"
+            @click="startLend(scope.$index, scope.row.deviceId)"
           >
             借出设备
           </el-button>
@@ -50,7 +50,7 @@
             v-if="scope.row.isLended == 1"
             type="primary"
             style="font-size: 2px"
-            @click="stopLend(scope.row.deviceId)"
+            @click="stopLend(scope.$index, scope.row.deviceId)"
           >
             归还设备
           </el-button>
@@ -70,9 +70,9 @@
 </template>
 
 <script>
-import { getDeviceLendList } from '@/api/device'
+import { getDeviceLendList, lendDevice, returnDevice } from "@/api/device";
 export default {
-  name: 'LendListDevice',
+  name: "LendListDevice",
   data() {
     return {
       deviceList: [],
@@ -85,56 +85,71 @@ export default {
       queryOptions: [
         {
           value: 0,
-          label: '全部设备'
+          label: "全部设备",
         },
         {
           value: 1,
-          label: '已借出'
+          label: "已借出",
         },
         {
           value: 2,
-          label: '未借出'
-        }
+          label: "未借出",
+        },
       ],
       page: {
         pageSize: 10,
         total: 50,
-        currentPage: 1
-      }
-    }
+        currentPage: 1,
+      },
+    };
   },
   created() {
-    this.getList()
+    this.getList();
   },
   methods: {
     getList() {
       // 获取设备维护信息
-      this.listLoading = true
+      this.listLoading = true;
       this.query.page = this.page.currentPage;
       this.query.size = this.page.pageSize;
       getDeviceLendList(this.query).then((response) => {
-        this.deviceList = response.data.list
-        this.page.total = response.data.total
-        this.listLoading = false
-      })
+        this.deviceList = response.data.list;
+        this.page.total = response.data.total;
+        this.listLoading = false;
+      });
     },
-    startLend(device_id) {
+    startLend(index, device_id) {
       // 发起借出设备
-      console.log('startMaintain:' + device_id)
+      let userId = 1; //管理员ID
+      let query = {
+        deviceId: device_id,
+        userId: userId,
+        detail: ""
+      };
+      lendDevice(query).then((response) => {
+        this.deviceList[index].isLended = 1;
+      });
     },
-    stopLend(device_id) {
+    stopLend(index, device_id) {
       // 发起设备归还
-      console.log('stopMaintain:' + device_id)
+      let userId = 1; //管理员ID
+      let query = {
+        deviceId: device_id,
+        userId: userId,
+      };
+      returnDevice(query).then((response) => {
+        this.deviceList[index].isLended = 0;
+      });
     },
     handleCurrentChange(new_page) {
-      this.page.currentPage = new_page
-      console.log('New Page: ' + this.page.currentPage)
+      this.page.currentPage = new_page;
+      console.log("New Page: " + this.page.currentPage);
     },
     convertBool(bool_val) {
       return bool_val ? "是" : "否";
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>

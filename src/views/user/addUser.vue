@@ -84,6 +84,7 @@
 
 <script>
 export default {
+  name: "AddUser",
   data() {
     return {
       form: {

@@ -35,7 +35,7 @@
       </el-table-column>
       <el-table-column prop="reserveUser" label="预约者" />
       <el-table-column prop="reserveTime" label="预约时间" />
-      <el-table-column prop="expectReturnTime" label="预计归还时间" />
+      <!-- <el-table-column prop="expectReturnTime" label="预计归还时间" /> -->
       <el-table-column prop="detail" label="预约原因" />
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
@@ -43,7 +43,7 @@
             v-if="scope.row.isReverse == 0"
             type="success"
             style="font-size: 2px"
-            @click="startReverse(scope.row.deviceId)"
+            @click="startReverse(scope.$index, scope.row.deviceId)"
           >
             预约设备
           </el-button>
@@ -51,7 +51,7 @@
             v-if="scope.row.isReverse == 1"
             type="primary"
             style="font-size: 2px"
-            @click="stopReverse(scope.row.deviceId)"
+            @click="stopReverse(scope.$index, scope.row.deviceId)"
           >
             取消预约
           </el-button>
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { getDeviceReverseList } from "@/api/device";
+import { getDeviceReverseList, reverseDevice, stopReverseDevice } from "@/api/device";
 export default {
   name: "ReverseListDevice",
   data() {
@@ -119,13 +119,27 @@ export default {
         this.listLoading = false;
       });
     },
-    startReverse(device_id) {
-      // 发起借出设备
-      console.log("startMaintain:" + device_id);
+    startReverse(index, device_id) {
+      // 发起预约设备
+      let userId = 1; //管理员ID
+      let query = {
+        deviceId: device_id,
+        userId: userId,
+      };
+      reverseDevice(query).then((response) => {
+        this.deviceList[index].isReverse = 1;
+      });
     },
-    stopReverse(device_id) {
-      // 发起设备归还
-      console.log("stopMaintain:" + device_id);
+    stopReverse(index, device_id) {
+      // 发起取消预约
+      let userId = 1; //管理员ID
+      let query = {
+        deviceId: device_id,
+        userId: userId,
+      };
+      stopReverseDevice(query).then((response) => {
+        this.deviceList[index].isReverse = 0;
+      });
     },
     handleCurrentChange(new_page) {
       this.page.currentPage = new_page;

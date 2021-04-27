@@ -1,8 +1,12 @@
 <template>
-  <div class="addDevice">
+  <div class="addLab">
     <el-form ref="form" :model="form" label-width="100px">
-      <el-form-item label="设备名称">
-        <el-input v-model="form.device_name" placeholder="请输入设备名称" />
+      <el-form-item label="实验室名">
+        <el-input
+          v-model="form.lab_name"
+          placeholder="请输入实验室名"
+          style="width: 180px"
+        />
       </el-form-item>
       <el-form-item label="负责人">
         <el-autocomplete
@@ -12,27 +16,22 @@
           @select="handleSelect"
         />
       </el-form-item>
-      <el-form-item label="是否正在维护">
-        <el-radio-group v-model="form.is_maintain">
-          <el-radio label="是" />
-          <el-radio label="否" />
-        </el-radio-group>
+      <el-form-item label="所在区域">
+        <el-input
+          v-model="form.region"
+          placeholder="请输入区域"
+          style="width: 180px"
+        />
       </el-form-item>
-      <el-form-item label="是否已废弃">
-        <el-radio-group v-model="form.is_abandoned">
-          <el-radio label="是" />
-          <el-radio label="否" />
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="设备详情">
+      <el-form-item label="备注">
         <el-input
           v-model="form.detail"
-          type="textarea"
-          placeholder="请输入设备详情"
+          placeholder="请输入备注"
+          style="width: 180px"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">新增设备</el-button>
+        <el-button type="primary" @click="onSubmit">新增实验室</el-button>
         <el-button>取消</el-button>
       </el-form-item>
     </el-form>
@@ -40,16 +39,15 @@
 </template>
 
 <script>
-import { addDevice } from "@/api/device";
 import { getUserList } from "@/api/user";
 export default {
+  name: "AddLab",
   data() {
     return {
       form: {
-        device_name: "",
+        lab_name: "",
         principal: "",
-        is_maintain: "否",
-        is_abandoned: "否",
+        region: "",
         detail: "",
       },
       principals: [],
@@ -60,8 +58,7 @@ export default {
   },
   methods: {
     getUsers() {
-      var query = {
-      };
+      var query = {};
       getUserList(query).then((response) => {
         for (var i of response.data.list) {
           this.principals.push({ value: i.userAlias });
@@ -72,34 +69,17 @@ export default {
       this.$alert("添加成功！", "提示", {
         confirmButtonText: "确定",
         callback: (action) => {
-          // this.$message({
-          //   type: "info",
-          //   message: `添加成功`,
-          // });
           this.form = {
-            device_name: "",
+            lab_name: "",
             principal: "",
-            is_maintain: "否",
-            is_abandoned: "否",
+            region: "",
             detail: "",
           };
         },
       });
     },
     onSubmit() {
-      var data = {
-        deviceName: this.form.device_name,
-        principalUser: this.form.principal,
-        isMaintain: this.form.is_maintain == "否" ? 0 : 1,
-        isScraped: this.form.is_abandoned == "否" ? 0 : 1,
-        detail: this.form.detail,
-      };
-      addDevice(data).then((response) => {
-        if (response.code == 20000) {
-          this.success();
-          console.log("添加成功");
-        }
-      });
+      this.success();
     },
     querySearchAsync(queryString, cb) {
       var principals = this.principals;
@@ -123,7 +103,7 @@ export default {
 </script>
 
 <style scoped>
-.addDevice {
+.addLab {
   margin-left: 10px;
   margin-top: 10px;
 }

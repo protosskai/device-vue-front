@@ -42,7 +42,7 @@
             v-if="scope.row.isScraped == 0"
             type="success"
             style="font-size: 2px"
-            @click="startScrap(scope.row.deviceId)"
+            @click="startScrap(scope.$index, scope.row.deviceId)"
           >
             报废设备
           </el-button>
@@ -50,7 +50,7 @@
             v-if="scope.row.isScraped == 1"
             type="primary"
             style="font-size: 2px"
-            @click="stopScrap(scope.row.deviceId)"
+            @click="stopScrap(scope.$index, scope.row.deviceId)"
           >
             取消报废
           </el-button>
@@ -71,6 +71,8 @@
 
 <script>
 import { getDeviceScrapList } from "@/api/device";
+import { scrapDevice } from "@/api/device";
+import { stopScrapDevice } from "@/api/device";
 export default {
   name: "ScrapListDevice",
   data() {
@@ -118,13 +120,27 @@ export default {
         this.listLoading = false;
       });
     },
-    startScrap(device_id) {
+    startScrap(index, device_id) {
       // 发起报废设备
-      console.log("startMaintain:" + device_id);
+      let userId = 1;
+      let query = {
+        userId: userId,
+        deviceId: device_id,
+      };
+      scrapDevice(query).then((response) => {
+        this.deviceList[index].isScraped = 1;
+      });
     },
-    stopScrap(device_id) {
+    stopScrap(index, device_id) {
       // 取消设备报废
-      console.log("stopMaintain:" + device_id);
+      let userId = 1; //管理员ID
+      let query = {
+        deviceId: device_id,
+        userId: userId,
+      };
+      stopScrapDevice(query).then((response) => {
+        this.deviceList[index].isScraped = 0;
+      });
     },
     handleCurrentChange(new_page) {
       this.page.currentPage = new_page;
