@@ -42,7 +42,7 @@
             v-if="scope.row.isLended == 0"
             type="success"
             style="font-size: 2px"
-            @click="startLend(scope.$index, scope.row.deviceId)"
+            @click="openLendDialog(scope.$index, scope.row.deviceId)"
           >
             借出设备
           </el-button>
@@ -66,11 +66,27 @@
       :total="page.total"
       @current-change="handleCurrentChange"
     />
+
+    <el-dialog title="发起借出" :visible.sync="dialogFormVisible">
+      <el-form :model="lend_form">
+        <el-form-item label="借出人" :label-width="formLabelWidth">
+          <el-input v-model="lend_form.userName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="借出原因" :label-width="formLabelWidth">
+          <el-input v-model="lend_form.detail" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="startLend()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getDeviceLendList, lendDevice, returnDevice } from "@/api/device";
+import { queryUserIdByName } from "@/api/user";
 export default {
   name: "LendListDevice",
   data() {
@@ -101,6 +117,14 @@ export default {
         total: 50,
         currentPage: 1,
       },
+      dialogFormVisible: false,
+      lend_form: {
+        userName: "",
+        detail: "",
+      },
+      lend_index: 0,
+      lend_device_id: 0,
+      formLabelWidth: "120px",
     };
   },
   created() {
@@ -118,16 +142,26 @@ export default {
         this.listLoading = false;
       });
     },
-    startLend(index, device_id) {
-      // 发起借出设备
-      let userId = 1; //管理员ID
-      let query = {
-        deviceId: device_id,
-        userId: userId,
-        detail: ""
-      };
-      lendDevice(query).then((response) => {
-        this.deviceList[index].isLended = 1;
+    openLendDialog(index, device_id) {
+      this.dialogFormVisible = true;
+      this.lend_index = index;
+      this.lend_device_id = device_id;
+    },
+    startLend() {
+      queryUserIdByName({
+        userName: this.lend_form.userName,
+      }).then((response) => {
+        // 发起借出设备
+        let userId = response.data.userId;
+        let query = {
+          deviceId: this.lend_device_id,
+          userId: userId,
+          detail: this.lend_form.detail,
+        };
+        lendDevice(query).then((response) => {
+          this.deviceList[this.lend_index].isLended = 1;
+        });
+        this.dialogFormVisible = false;
       });
     },
     stopLend(index, device_id) {

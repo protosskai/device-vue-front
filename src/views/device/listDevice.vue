@@ -1,5 +1,19 @@
 <template>
   <div class="list-device">
+    搜索：<span
+      ><el-input
+        class="search-input"
+        v-model="search_input"
+        placeholder="请输入设备名称"
+      ></el-input>
+      <el-button
+        id="search_btn"
+        style="margin-left: 10px"
+        @click="search_device()"
+        >搜索</el-button
+      >
+    </span>
+
     <el-table
       v-loading="listLoading"
       :data="
@@ -36,7 +50,11 @@
             >查看二维码</el-button
           > -->
           <el-popover placement="right" width="300" trigger="click">
-            <vue-qr ref="Qrcode" :text="generate_text(scope.row.uuid)" :size="300"></vue-qr>
+            <vue-qr
+              ref="Qrcode"
+              :text="generate_text(scope.row.uuid)"
+              :size="300"
+            ></vue-qr>
             <el-button slot="reference">查看二维码</el-button>
           </el-popover>
         </template>
@@ -71,6 +89,7 @@ export default {
         total: 50,
         currentPage: 1,
       },
+      search_input: "",
     };
   },
   created() {
@@ -92,13 +111,23 @@ export default {
     convertBool(bool_val) {
       return bool_val ? "是" : "否";
     },
-    generate_text(uuid){
+    generate_text(uuid) {
       let o = {
         type: "info",
-        uuid: uuid
+        uuid: uuid,
+      };
+      return JSON.stringify(o);
+    },
+    search_device() {
+      let new_list = [];
+      let device_name = this.search_input;
+      for (let i = 0; i < this.deviceList.length; i++) {
+        if (this.deviceList[i].deviceName == device_name) {
+          new_list.push(this.deviceList[i])
+        }
       }
-      return JSON.stringify(o)
-    }
+      this.deviceList = new_list;
+    },
   },
 };
 </script>
@@ -114,5 +143,8 @@ export default {
   padding: 0px;
   left: 0px;
   margin-bottom: 10px;
+}
+.search-input {
+  width: 200px;
 }
 </style>

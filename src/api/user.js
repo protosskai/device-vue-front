@@ -30,3 +30,11 @@ export function getUserList(query) {
     params: query
   })
 }
+
+export function queryUserIdByName(query){
+  return request({
+    url: '/user/queryId',
+    method: 'get',
+    params: query
+  })
+}
