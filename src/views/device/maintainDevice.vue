@@ -36,14 +36,13 @@
       <el-table-column prop="maintainOwner" label="维护人" />
       <el-table-column prop="startTime" label="开始时间" />
       <el-table-column prop="finishedTime" label="预计结束时间" />
-      <el-table-column prop="status" label="维护状态" />
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
           <el-button
             v-if="scope.row.isMaintain == 0"
             type="success"
             style="font-size: 2px; margin-right: 5px"
-            @click="startMaintain(scope.$index, scope.row.deviceId)"
+            @click="openMaintainDialog(scope.$index, scope.row.deviceId)"
           >
             发起维护
           </el-button>
@@ -67,12 +66,53 @@
       :total="page.total"
       @current-change="handleCurrentChange"
     />
+    <el-dialog title="发起维护" :visible.sync="dialogFormVisible">
+      <el-form :model="maintain_form">
+        <el-form-item label="维护人" :label-width="formLabelWidth">
+          <el-input
+            v-model="maintain_form.userName"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="维护原因" :label-width="formLabelWidth">
+          <el-input
+            v-model="maintain_form.detail"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="维护开始时间" :label-width="formLabelWidth">
+          <div class="block">
+            <el-date-picker
+              v-model="maintain_start_date"
+              type="datetime"
+              placeholder="选择日期时间"
+            >
+            </el-date-picker>
+          </div>
+        </el-form-item>
+        <el-form-item label="维护结束时间" :label-width="formLabelWidth">
+          <div class="block">
+            <el-date-picker
+              v-model="maintain_end_date"
+              type="datetime"
+              placeholder="选择日期时间"
+            >
+            </el-date-picker>
+          </div>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="startMaintain()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getDeviceMaintainList } from "@/api/device";
-import { startMaintainDevice, stopMaintainDevice } from "@/api/device";
+import { startMaintainDevice, stopMaintainDevice, startMaintainDevice1 } from "@/api/device";
+import { queryUserIdByName } from "@/api/user";
 export default {
   name: "MaintainListDevice",
   data() {
@@ -103,6 +143,16 @@ export default {
         total: 50,
         currentPage: 1,
       },
+      maintain_form: {
+        userName: "",
+        detail: "",
+      },
+      dialogFormVisible: false,
+      maintain_index: 0,
+      maintain_device_id: 0,
+      maintain_end_date: null,
+      maintain_start_date: null,
+      formLabelWidth: "120px",
     };
   },
   created() {
@@ -120,15 +170,39 @@ export default {
         this.listLoading = false;
       });
     },
-    startMaintain(index, device_id) {
-      // 发起维护设备
-      let userId = 1; //管理员ID
-      let query = {
-        deviceId: device_id,
-        userId: userId,
-      };
-      startMaintainDevice(query).then((response) => {
-        this.deviceList[index].isMaintain = 1;
+    openMaintainDialog(index, device_id) {
+      this.dialogFormVisible = true;
+      this.maintain_index = index;
+      this.maintain_device_id = device_id;
+    },
+    // startMaintain(index, device_id) {
+    //   // 发起维护设备
+    //   let userId = 1; //管理员ID
+    //   let query = {
+    //     deviceId: device_id,
+    //     userId: userId,
+    //   };
+    //   startMaintainDevice(query).then((response) => {
+    //     this.deviceList[index].isMaintain = 1;
+    //   });
+    // },
+    startMaintain() {
+      queryUserIdByName({
+        userName: this.maintain_form.userName,
+      }).then((response) => {
+        // 发起维护设备
+        let userId = response.data.userId;
+        let query = {
+          deviceId: this.maintain_device_id,
+          userId: userId,
+          maintainStartDate: this.maintain_start_date,
+          maintainEndDate: this.maintain_end_date,
+        };
+        startMaintainDevice1(query).then((response) => {
+          this.deviceList[this.maintain_index].isMaintain = 1;
+          this.dialogFormVisible = false
+          this.getList()
+        });
       });
     },
     stopMaintain(index, device_id) {
@@ -136,10 +210,11 @@ export default {
       let userId = 1; //管理员ID
       let query = {
         deviceId: device_id,
-        userId: userId
+        userId: userId,
       };
       stopMaintainDevice(query).then((response) => {
         this.deviceList[index].isMaintain = 0;
+        this.getList()
       });
     },
     handleCurrentChange(new_page) {

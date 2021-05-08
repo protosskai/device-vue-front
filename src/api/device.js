@@ -31,6 +31,14 @@ export function startMaintainDevice(query) {
   })
 }
 
+export function startMaintainDevice1(query) {
+  return request({
+    url: '/device/maintain/startMaintainDevice1',
+    method: 'get',
+    params: query
+  })
+}
+
 export function stopMaintainDevice(query) {
   return request({
     url: '/device/maintain/stopMaintainDevice',

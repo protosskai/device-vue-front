@@ -160,6 +160,7 @@ export default {
         };
         lendDevice(query).then((response) => {
           this.deviceList[this.lend_index].isLended = 1;
+          this.getList()
         });
         this.dialogFormVisible = false;
       });
@@ -173,6 +174,7 @@ export default {
       };
       returnDevice(query).then((response) => {
         this.deviceList[index].isLended = 0;
+        this.getList()
       });
     },
     handleCurrentChange(new_page) {

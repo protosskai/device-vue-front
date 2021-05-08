@@ -35,7 +35,6 @@
       </el-table-column>
       <el-table-column prop="scrapUser" label="废弃执行人" />
       <el-table-column prop="scrapTime" label="废弃时间" />
-      <el-table-column prop="detail" label="废弃原因" />
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
           <el-button
@@ -129,6 +128,7 @@ export default {
       };
       scrapDevice(query).then((response) => {
         this.deviceList[index].isScraped = 1;
+        this.getList()
       });
     },
     stopScrap(index, device_id) {
@@ -140,6 +140,7 @@ export default {
       };
       stopScrapDevice(query).then((response) => {
         this.deviceList[index].isScraped = 0;
+        this.getList()
       });
     },
     handleCurrentChange(new_page) {
