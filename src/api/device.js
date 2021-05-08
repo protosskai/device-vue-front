@@ -103,6 +103,14 @@ export function reverseDevice(query){
   })
 }
 
+export function reverseDevice1(query){
+  return request({
+    url: 'device/reserve/startReverse1',
+    method: 'get',
+    params: query
+  })
+}
+
 export function stopReverseDevice(query){
   return request({
     url: 'device/reserve/stopReverse',

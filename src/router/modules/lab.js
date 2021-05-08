@@ -31,16 +31,16 @@ const labRoute = {
         roles: ['admin', 'editor'] // you can set roles in root nav
       }
     },
-    // {
-    //   path: '/realTimeLab',
-    //   component: () => import('@/views/module-manage/index'),
-    //   name: 'RealTimeLab',
-    //   meta: {
-    //     title: '实时状态',
-    //     icon: 'el-icon-odometer',
-    //     roles: ['admin', 'editor'] // you can set roles in root nav
-    //   }
-    // }
+    {
+      path: '/realTimeLab',
+      component: () => import('@/views/laboratory/labStatus'),
+      name: 'RealTimeLab',
+      meta: {
+        title: '实时状态',
+        icon: 'el-icon-odometer',
+        roles: ['admin', 'editor'] // you can set roles in root nav
+      }
+    }
   ]
 }
 

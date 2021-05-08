@@ -119,14 +119,23 @@ export default {
       return JSON.stringify(o);
     },
     search_device() {
-      let new_list = [];
-      let device_name = this.search_input;
-      for (let i = 0; i < this.deviceList.length; i++) {
-        if (this.deviceList[i].deviceName == device_name) {
-          new_list.push(this.deviceList[i])
+      this.listLoading = true
+      getDeviceList().then((response) => {
+        this.deviceList = response.data.list;
+        this.listLoading = false;
+        let new_list = [];
+        let device_name = this.search_input;
+        for (let i = 0; i < response.data.list.length; i++) {
+          if (
+            response.data.list[i].deviceName == device_name ||
+            device_name.trim() == ""
+          ) {
+            new_list.push(response.data.list[i]);
+          }
         }
-      }
-      this.deviceList = new_list;
+        this.deviceList = new_list;
+        this.page.total = new_list.length
+      });
     },
   },
 };

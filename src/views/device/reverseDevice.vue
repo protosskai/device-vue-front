@@ -43,7 +43,7 @@
             v-if="scope.row.isReverse == 0"
             type="success"
             style="font-size: 2px"
-            @click="startReverse(scope.$index, scope.row.deviceId)"
+            @click="openReverseDialog(scope.$index, scope.row.deviceId)"
           >
             预约设备
           </el-button>
@@ -67,11 +67,45 @@
       :total="page.total"
       @current-change="handleCurrentChange"
     />
+
+    <el-dialog title="发起预约" :visible.sync="dialogFormVisible">
+      <el-form :model="reverse_form">
+        <el-form-item label="预约人" :label-width="formLabelWidth">
+          <el-input
+            v-model="reverse_form.userName"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="预约原因" :label-width="formLabelWidth">
+          <el-input v-model="reverse_form.detail" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="预约时间" :label-width="formLabelWidth">
+          <div class="block">
+            <el-date-picker
+              v-model="reverse_date"
+              type="datetime"
+              placeholder="选择日期时间"
+            >
+            </el-date-picker>
+          </div>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="startReverse()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getDeviceReverseList, reverseDevice, stopReverseDevice } from "@/api/device";
+import {
+  getDeviceReverseList,
+  reverseDevice,
+  stopReverseDevice,
+  reverseDevice1,
+} from "@/api/device";
+import { queryUserIdByName } from "@/api/user";
 export default {
   name: "ReverseListDevice",
   data() {
@@ -102,6 +136,15 @@ export default {
         total: 50,
         currentPage: 1,
       },
+      dialogFormVisible: false,
+      reverse_form: {
+        userName: "",
+        detail: "",
+      },
+      reverse_index: 0,
+      reverse_device_id: 0,
+      formLabelWidth: "120px",
+      reverse_date: null,
     };
   },
   created() {
@@ -119,15 +162,26 @@ export default {
         this.listLoading = false;
       });
     },
-    startReverse(index, device_id) {
-      // 发起预约设备
-      let userId = 1; //管理员ID
-      let query = {
-        deviceId: device_id,
-        userId: userId,
-      };
-      reverseDevice(query).then((response) => {
-        this.deviceList[index].isReverse = 1;
+    openReverseDialog(index, device_id) {
+      this.dialogFormVisible = true;
+      this.reverse_index = index;
+      this.reverse_device_id = device_id;
+    },
+    startReverse() {
+      queryUserIdByName({
+        userName: this.reverse_form.userName,
+      }).then((response) => {
+        let userId = response.data.userId;
+        let query = {
+          deviceId: this.reverse_device_id,
+          userId: userId,
+          reverseDate: this.reverse_date,
+        };
+        reverseDevice1(query).then((response) => {
+          this.deviceList[this.reverse_index].isReverse = 1;
+          this.getList();
+        });
+        this.dialogFormVisible = false;
       });
     },
     stopReverse(index, device_id) {
@@ -139,6 +193,7 @@ export default {
       };
       stopReverseDevice(query).then((response) => {
         this.deviceList[index].isReverse = 0;
+        this.getList();
       });
     },
     handleCurrentChange(new_page) {
