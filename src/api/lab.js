@@ -7,3 +7,11 @@ export function getLabList(query) {
     params: query
   })
 }
+
+export function queryCurrentUser(query) {
+  return request({
+    url: '/user/location/query',
+    method: 'get',
+    params: query
+  })
+}
