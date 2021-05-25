@@ -40,6 +40,7 @@
 
 <script>
 import { getUserList } from "@/api/user";
+import { addLab } from "@/api/lab";
 export default {
   name: "AddLab",
   data() {
@@ -66,16 +67,24 @@ export default {
       });
     },
     success() {
-      this.$alert("添加成功！", "提示", {
-        confirmButtonText: "确定",
-        callback: (action) => {
-          this.form = {
-            lab_name: "",
-            principal: "",
-            region: "",
-            detail: "",
-          };
-        },
+      let data = {
+        labName: this.form.lab_name,
+        principalUser: this.form.principal,
+        region: this.form.region,
+        detail: this.form.detail,
+      };
+      addLab(data).then((response) => {
+        this.$alert("添加成功！", "提示", {
+          confirmButtonText: "确定",
+          callback: (action) => {
+            this.form = {
+              lab_name: "",
+              principal: "",
+              region: "",
+              detail: "",
+            };
+          },
+        });
       });
     },
     onSubmit() {

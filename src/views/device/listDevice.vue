@@ -26,7 +26,7 @@
     >
       <el-table-column prop="id" label="编号" width="80" />
       <el-table-column prop="deviceName" label="设备名称" />
-      <el-table-column prop="principalUser" label="负责人" />
+      <el-table-column prop="principalUserAlias" label="负责人" />
       <el-table-column prop="isMaintain" label="是否维护">
         <template slot-scope="scope">
           <div>
@@ -41,14 +41,22 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column prop="isScraped" label="是否借出">
+        <template slot-scope="scope">
+          <div>
+            {{ convertBool(scope.row.isLended) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="isScraped" label="是否预约">
+        <template slot-scope="scope">
+          <div>
+            {{ convertBool(scope.row.isReverse) }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="二维码">
         <template slot-scope="scope">
-          <!-- <el-button
-            type="success"
-            style="font-size: 2px; margin-right: 5px"
-            @click="showQRCode(scope.row.uuid)"
-            >查看二维码</el-button
-          > -->
           <el-popover placement="right" width="300" trigger="click">
             <vue-qr
               ref="Qrcode"
@@ -119,7 +127,7 @@ export default {
       return JSON.stringify(o);
     },
     search_device() {
-      this.listLoading = true
+      this.listLoading = true;
       getDeviceList().then((response) => {
         this.deviceList = response.data.list;
         this.listLoading = false;
@@ -134,7 +142,7 @@ export default {
           }
         }
         this.deviceList = new_list;
-        this.page.total = new_list.length
+        this.page.total = new_list.length;
       });
     },
   },

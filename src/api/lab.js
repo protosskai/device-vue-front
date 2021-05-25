@@ -15,3 +15,11 @@ export function queryCurrentUser(query) {
     params: query
   })
 }
+
+export function addLab(data) {
+  return request({
+    url: '/lab/info/add',
+    method: 'post',
+    data
+  })
+}

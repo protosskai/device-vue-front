@@ -83,67 +83,87 @@
 </template>
 
 <script>
+import { getRoleList } from "@/api/role";
+import { addUser } from "@/api/user";
 export default {
   name: "AddUser",
   data() {
     return {
       form: {
         user_name: "",
-        user_alias: "",
         password: "",
         password1: "",
+        user_alias: "",
         role: "",
-        sex: "",
+        sex: 0,
         phone: "",
         wechat: "",
         qq: "",
       },
       roleOptions: [
         {
-          value: "admin",
-          label: "管理员",
+          // value: "admin",
+          // label: "管理员",
         },
       ],
       role: "",
       sexOptions: [
         {
-          value: "0",
+          value: 0,
           label: "男",
         },
         {
-          value: "1",
+          value: 1,
           label: "女",
         },
       ],
     };
   },
-  mounted() {},
+  mounted() {
+    this.getRoles();
+  },
   methods: {
     success() {
-      this.$alert("添加成功！", "提示", {
-        confirmButtonText: "确定",
-        callback: (action) => {
-          // this.$message({
-          //   type: "info",
-          //   message: `添加成功`,
-          // });
-          this.form = {
-            user_name: "",
-            user_alias: "",
-            password: "",
-            password1: "",
-            role: "",
-            sex: "",
-            phone: "",
-            wechat: "",
-            qq: "",
-          };
-        },
+      let data = {
+        userName: this.form.user_name,
+        userAlias: this.form.user_alias,
+        password: this.form.password,
+        role: this.form.role,
+        sex: this.form.sex,
+        phone: this.form.phone,
+        qq: this.form.qq,
+        wechat: this.form.wechat,
+      };
+      addUser(data).then((response) => {
+        this.$alert("添加成功！", "提示", {
+          confirmButtonText: "确定",
+          callback: (action) => {
+            this.form = {
+              user_name: "",
+              user_alias: "",
+              password: "",
+              password1: "",
+              role: "",
+              sex: 0,
+              phone: "",
+              wechat: "",
+              qq: "",
+            };
+          },
+        });
       });
     },
     onSubmit() {
       this.success();
       console.log("submit!");
+    },
+    getRoles() {
+      this.roleOptions = [];
+      getRoleList().then((response) => {
+        for (var i of response.data.list) {
+          this.roleOptions.push({ value: i.roleName, label: i.roleName });
+        }
+      });
     },
   },
 };
